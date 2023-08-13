@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stream_and_socket/homepage.dart';
+import 'package:streams/homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +25,6 @@ class MyApp extends StatelessWidget {
           // is not restarted.
           primarySwatch: Colors.blue,
         ),
-        home: StremExample());
+        home: BroadcastStreamExample());
   }
 }

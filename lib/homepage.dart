@@ -1,52 +1,86 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
-class StremExample extends StatefulWidget {
-  const StremExample({super.key});
+//Broadcast Stream
+class BroadcastStreamExample extends StatefulWidget {
+  BroadcastStreamExample({super.key});
 
   @override
-  State<StremExample> createState() => _StremExampleState();
+  State<BroadcastStreamExample> createState() => _BroadcastStreamExampleState();
 }
 
-class _StremExampleState extends State<StremExample> {
-  StreamController<String> stringStream = StreamController();
-  late Stream<String> dataStream;
+class _BroadcastStreamExampleState extends State<BroadcastStreamExample> {
+  late Stream<String> dataStream; // stream of data
+  StreamController<String> streamController = StreamController<String>();
+
   @override
   void initState() {
-    // TODO: implement initState
-    dataStream = stringStream.stream.asBroadcastStream();
+    dataStream = streamController.stream.asBroadcastStream();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Streams"),
-        ),
-        body: Column(
-          children: [
-            StreamBuilder<String>(
+      appBar: AppBar(
+        title: const Text("Streams"),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Listner 1
+          StreamBuilder<String>(
               stream: dataStream,
               builder: (context, snapshot) {
                 return Text(snapshot.data ?? "No data");
-              },
-            ),
-            TextField(
+              }),
+          TextField(
               onChanged: (value) {
-                stringStream.add(value);
+                streamController.add(value); // listening data to stream
               },
-            ),
-            StreamBuilder<String>(
+              decoration: const InputDecoration(
+                hintText: "Enter text here",
+              )),
+          // Listner 2
+          StreamBuilder<String>(
               stream: dataStream,
               builder: (context, snapshot) {
                 return Text(snapshot.data ?? "No data");
-              },
-            ),
-          ],
-        ));
+              }),
+        ],
+      ),
+    );
+  }
+}
+
+//Single Stream
+class SingleStreamExample extends StatelessWidget {
+  SingleStreamExample({super.key});
+  StreamController<String> dataStream = StreamController<String>();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Streams"),
+      ),
+      body: StreamBuilder(
+        stream: dataStream.stream,
+        builder: (context, snapshot) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(snapshot.data ?? "No data"),
+              TextField(
+                  onChanged: (value) {
+                    dataStream.add(value); // listening data to stream
+                  },
+                  decoration: const InputDecoration(
+                    hintText: "Enter text here",
+                  ))
+            ],
+          );
+        },
+      ),
+    );
   }
 }
